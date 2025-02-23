@@ -33,6 +33,7 @@ public class BusReservationService implements ReservationService {
 
     @Override
     public AvailabilityResponse checkAvailability(AvailabilityRequest request) {
+
         Route route = validateRoute(request.getOrigin(), request.getDestination());
         int passengerCount = request.getPassengerCount();
 

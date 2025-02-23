@@ -31,8 +31,10 @@ public class ReservationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String path = req.getPathInfo();
-        if (CHECK_AVAILABILITY.equals(path)) {
+        logger.info("Get request received");
+        String servletPath = req.getServletPath();
+
+        if (CHECK_AVAILABILITY.equals(servletPath)) {
             handleAvailabilityRequest(req, resp);
         } else {
             sendJsonResponse(resp, HttpServletResponse.SC_NOT_FOUND, "{\"error\": \"Not Found\"}");
@@ -41,7 +43,9 @@ public class ReservationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String path = req.getPathInfo();
+        logger.info("Post request received");
+        String path = req.getServletPath();
+        logger.info("Path: {}", path);
         if (RESERVE.equals(path)) {
             handleReservationRequest(req, resp);
         } else {
@@ -51,6 +55,7 @@ public class ReservationServlet extends HttpServlet {
 
     private void handleAvailabilityRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
+            logger.info("Starting to proceed availability request");
             AvailabilityRequest availabilityRequest = new AvailabilityRequest.Builder()
                     .origin(req.getParameter(ORIGIN))
                     .destination(req.getParameter(DESTINATION))
@@ -72,6 +77,7 @@ public class ReservationServlet extends HttpServlet {
 
     private void handleReservationRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
+            logger.info("Starting to proceed reservation request - {}", req);
             ReservationRequest request = objectMapper.readValue(readRequestBody(req), ReservationRequest.class);
             ReservationResponse response = reservationService.reserveTicket(request);
             String stringResponse = objectMapper.writeValueAsString(response);
