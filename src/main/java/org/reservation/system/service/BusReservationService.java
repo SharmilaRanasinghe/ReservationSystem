@@ -112,28 +112,20 @@ public class BusReservationService implements ReservationService {
      * @return List of allocated seat numbers
      * @throws NotEnoughSeatException if not enough seats are available
      */
-    private List<String> reserveSeats(Route route, LocalDate travelDate, int passengers) {
-    ConcurrentHashMap<String, AtomicBoolean> seatMap = getSeatMap(route, travelDate);
-    List<String> reservedSeats = new ArrayList<>();
+    private synchronized List<String> reserveSeats(Route route, LocalDate travelDate, int passengers) {
 
-    synchronized (seatMap) { // Lock seatMap to avoid concurrent modifications
-        for (Seat seat : bus.getSeats()) {
-            if (reservedSeats.size() >= passengers) {
-                break;
-            }
-            seatMap.computeIfAbsent(seat.getSeatNumber(), key -> new AtomicBoolean(false));
-            if (!seatMap.get(seat.getSeatNumber()).get()) {
-                seatMap.get(seat.getSeatNumber()).set(true); // Mark as booked
-                reservedSeats.add(seat.getSeatNumber());
-            }
+        List<String> reservedSeats = getAvailableSeats(route, travelDate, passengers);
+        ConcurrentHashMap<String, AtomicBoolean> seatMap = getSeatMap(route, travelDate);
+
+        if (reservedSeats.size() < passengers) {
+            throw new NotEnoughSeatException("Not enough seats available for " + travelDate);
         }
-    }
 
-    if (reservedSeats.size() < passengers) {
-        throw new NotEnoughSeatException("Not enough seats available for " + travelDate);
+        // Mark seats as reserved
+        reservedSeats.forEach(seat -> seatMap.computeIfPresent(seat, (key, value) -> { value.set(true); return value; }));
+
+        return reservedSeats;
     }
-    return reservedSeats;
-}
 
 
     /**
