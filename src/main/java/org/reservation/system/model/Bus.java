@@ -1,9 +1,11 @@
 package org.reservation.system.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * Represents a bus with predefined routes, seats, ticket prices, and schedules.
+ */
 public class Bus {
     private final int rows = 10;
     private final int seatsPerRow = 4;
@@ -17,7 +19,7 @@ public class Bus {
     private static final List<Route> returnRoutes = new ArrayList<>();
     private static final Map<String, Integer> travelDurations = new HashMap<>(); // Travel time per route
 
-    private static final int baseDepartureTime = 9; // hour 9:00 AM
+    private static final int baseDepartureTime = 9; // Hour 9:00 AM
     private static final int baseReturnDepartureTime = 14;
 
     static {
@@ -26,6 +28,9 @@ public class Bus {
         initializeTravelDurations();
     }
 
+    /**
+     * Initializes ticket prices for different routes.
+     */
     private static void initializeTicketPrices() {
         ticketPrices.put("A-B", BigDecimal.valueOf(50));
         ticketPrices.put("A-C", BigDecimal.valueOf(100));
@@ -35,6 +40,9 @@ public class Bus {
         ticketPrices.put("C-D", BigDecimal.valueOf(50));
     }
 
+    /**
+     * Initializes the estimated travel durations (in minutes) for different routes.
+     */
     private static void initializeTravelDurations() {
         travelDurations.put("A-B", 90);  // 1 hour 30 mins
         travelDurations.put("A-C", 180); // 3 hours
@@ -44,9 +52,12 @@ public class Bus {
         travelDurations.put("C-D", 90);  // 1 hour 30 mins
     }
 
+    /**
+     * Initializes all possible routes and return routes between bus stops.
+     */
     private static void initializeRoutes() {
-        for (int i = 0; i <= stops.length-2; i++) {
-            for (int j = i+1; j <= stops.length-1; j++) {
+        for (int i = 0; i <= stops.length - 2; i++) {
+            for (int j = i + 1; j <= stops.length - 1; j++) {
                 Route route = new Route(stops[i] + stops[j], stops[i], stops[j], false);
                 routes.add(route);
                 Route returnRoute = new Route(stops[j] + stops[i], stops[j], stops[i], true);
@@ -55,13 +66,17 @@ public class Bus {
         }
     }
 
-
+    /**
+     * Constructs a new Bus and initializes its seats.
+     */
     public Bus() {
         initializeSeats();
     }
 
+    /**
+     * Initializes all seats in the bus.
+     */
     private void initializeSeats() {
-
         for (int i = 1; i <= rows; i++) {
             for (char seatLabel : seatLabels) {
                 Seat seat = new Seat(i + String.valueOf(seatLabel));
@@ -70,35 +85,29 @@ public class Bus {
         }
     }
 
-    public static Map<String, BigDecimal> getTicketPriceList() {
-        return ticketPrices;
-    }
-
-    public List<Seat> getSeats() {
-        return seatList;
-    }
-
+    /**
+     * Finds a route for the given origin and destination.
+     *
+     * @param origin      The starting point of the journey.
+     * @param destination The ending point of the journey.
+     * @return The corresponding route or return route, if available.
+     */
     public Route getRoute(String origin, String destination) {
-
-        return routes.stream().filter(route -> route.getOrigin().equals(origin)
-                && route.getDestination().equals(destination)).findFirst().orElse(returnRoutes.stream().filter(route -> route.getOrigin().equals(origin)
-                && route.getDestination().equals(destination)).findFirst().orElse(null));
+        return routes.stream()
+                .filter(route -> route.getOrigin().equals(origin) && route.getDestination().equals(destination))
+                .findFirst()
+                .orElse(returnRoutes.stream()
+                        .filter(route -> route.getOrigin().equals(origin) && route.getDestination().equals(destination))
+                        .findFirst()
+                        .orElse(null));
     }
 
-    public static Map<String, Integer> getTravelDurations() {
-        return travelDurations;
-    }
-
-    public static String[] getBusStops() {
-        return stops;
-    }
-
-    public static int getBaseDepartureTime() {
-        return baseDepartureTime;
-    }
-
-    public static int getBaseReturnDepartureTime() {
-        return baseReturnDepartureTime;
-    }
+    // Getters
+    public static Map<String, BigDecimal> getTicketPriceList() { return ticketPrices; }
+    public List<Seat> getSeats() { return seatList; }
+    public static Map<String, Integer> getTravelDurations() { return travelDurations; }
+    public static String[] getBusStops() { return stops; }
+    public static int getBaseDepartureTime() { return baseDepartureTime; }
+    public static int getBaseReturnDepartureTime() { return baseReturnDepartureTime; }
 }
 
