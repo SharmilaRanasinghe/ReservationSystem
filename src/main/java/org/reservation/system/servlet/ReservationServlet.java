@@ -15,6 +15,7 @@ import org.reservation.system.model.response.AvailabilityResponse;
 import org.reservation.system.model.response.ReservationResponse;
 import org.reservation.system.service.BusReservationService;
 import org.reservation.system.service.ReservationService;
+import org.reservation.system.validator.RequestValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,6 +93,8 @@ public class ReservationServlet extends HttpServlet {
     private void handleAvailabilityRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             logger.info("Starting to proceed availability request");
+            RequestValidator.validatePassengerCount(req);
+
             AvailabilityRequest availabilityRequest = new AvailabilityRequest.Builder()
                     .origin(req.getParameter(ORIGIN))
                     .destination(req.getParameter(DESTINATION))
@@ -99,6 +102,7 @@ public class ReservationServlet extends HttpServlet {
                     .travelDate(req.getParameter(TRAVEL_DATE))
                     .build();
 
+            RequestValidator.validateAvailabilityRequest(availabilityRequest);
             AvailabilityResponse availabilityResponse = reservationService.checkAvailability(availabilityRequest);
             ApiResponse<AvailabilityResponse> response = ApiResponse.success(availabilityResponse);
             String stringResponse = objectMapper.writeValueAsString(response);
@@ -131,6 +135,7 @@ public class ReservationServlet extends HttpServlet {
             logger.info("Starting to proceed reservation request - {}", req);
             ReservationRequest request = objectMapper.readValue(readRequestBody(req), ReservationRequest.class);
 
+            RequestValidator.validateReservationRequest(request);
             ReservationResponse resResponse = reservationService.reserveTicket(request);
             ApiResponse<ReservationResponse> response = ApiResponse.success(resResponse);
             String stringResponse = objectMapper.writeValueAsString(response);

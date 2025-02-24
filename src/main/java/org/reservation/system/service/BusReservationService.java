@@ -3,7 +3,6 @@ package org.reservation.system.service;
 import org.reservation.system.exception.RouteNotFoundException;
 import org.reservation.system.exception.NotEnoughSeatException;
 import org.reservation.system.model.*;
-import org.reservation.system.validator.RequestValidator;
 import org.reservation.system.model.request.AvailabilityRequest;
 import org.reservation.system.model.request.ReservationRequest;
 import org.reservation.system.model.response.AvailabilityResponse;
@@ -41,8 +40,6 @@ public class BusReservationService implements ReservationService {
         Route route = validateRoute(request.getOrigin(), request.getDestination());
         int passengerCount = request.getPassengerCount();
 
-        RequestValidator.validateAvailabilityRequest(request);
-
         LocalDate travelDate = DateUtils.toLocalDate(request.getTravelDate());
         boolean isAvailable = getAvailableSeats(route, travelDate, passengerCount).size() >= passengerCount;
         logger.info("Availability - {}", isAvailable);
@@ -62,7 +59,6 @@ public class BusReservationService implements ReservationService {
     @Override
     public ReservationResponse reserveTicket(ReservationRequest request) {
         logger.info("Reserving ticket for bus reservation");
-        RequestValidator.validateReservationRequest(request);
         Route route = validateRoute(request.getOrigin(), request.getDestination());
         LocalDate travelDate = DateUtils.toLocalDate(request.getTravelDate());
 

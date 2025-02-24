@@ -1,5 +1,6 @@
 package org.reservation.system.validator;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.reservation.system.exception.RequestValidationException;
 import org.reservation.system.model.request.AvailabilityRequest;
@@ -9,6 +10,7 @@ import org.reservation.system.util.DateUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static org.reservation.system.Constant.AttributeName.PASSENGER_COUNT;
 import static org.reservation.system.Constant.DefaultConfig.MAX_RESERVATION_DAYS;
 import static org.reservation.system.Constant.DefaultConfig.MIN_RESERVATION_DAYS;
 
@@ -54,6 +56,12 @@ public class RequestValidator {
         if (localDate.isBefore(reservationStartDate) || localDate.isAfter(reservationEndDate)) {
             String message = String.format("Reservations are only allowed from %s to %s.", reservationStartDate, reservationEndDate);
             throw new RequestValidationException(message);
+        }
+    }
+
+    public static void validatePassengerCount(HttpServletRequest req) {
+        if (StringUtils.isEmpty(req.getParameter(PASSENGER_COUNT))) {
+            throw new RequestValidationException("Mandatory parameter Passenger count is not specified.");
         }
     }
 
