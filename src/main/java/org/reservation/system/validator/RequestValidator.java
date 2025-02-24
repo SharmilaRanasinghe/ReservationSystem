@@ -27,10 +27,10 @@ public class RequestValidator {
     }
 
     private static void validateCommonFields(String origin, String destination, int passengerCount, String travelDate) {
-        if (StringUtils.isBlank(origin)) {
+        if (StringUtils.isEmpty(origin)) {
             throw new RequestValidationException("Mandatory parameter origin is not specified.");
         }
-        if (StringUtils.isBlank(destination)) {
+        if (StringUtils.isEmpty(destination)) {
             throw new RequestValidationException("Mandatory parameter destination is not specified.");
         }
         if (passengerCount <= 0) {
@@ -41,7 +41,7 @@ public class RequestValidator {
     }
 
     private static void validateTravelDate(String travelDate) {
-        if (StringUtils.isBlank(travelDate)) {
+        if (StringUtils.isEmpty(travelDate)) {
             throw new RequestValidationException("Mandatory parameter travelDate is not specified.");
         }
 

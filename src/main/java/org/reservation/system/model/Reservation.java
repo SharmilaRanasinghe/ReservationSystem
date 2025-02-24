@@ -11,7 +11,7 @@ public class Reservation {
     private final Route route;
     private final Bus bus;
     private final List<String> reservedSeats;
-    private final BigDecimal price;
+    private final BigDecimal totalPrice;
     private ReservationStatus status;
     private final LocalDateTime departureTime;
     private final LocalDateTime arrivalTime;
@@ -21,7 +21,7 @@ public class Reservation {
         this.route = route;
         this.bus = bus;
         this.reservedSeats = reservedSeats;
-        this.price = price;
+        this.totalPrice = price;
         this.status = ReservationStatus.CONFIRMED;
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
@@ -39,7 +39,7 @@ public class Reservation {
     public Route getRoute() { return route; }
     public Bus getBus() { return bus; }
     public List<String> getReservedSeats() { return new ArrayList<>(reservedSeats); }
-    public BigDecimal getPrice() { return price; }
+    public BigDecimal getTotalPrice() { return totalPrice; }
     public ReservationStatus getStatus() { return status; }
     public LocalDateTime getDepartureTime() { return departureTime; }
     public LocalDateTime getArrivalTime() { return arrivalTime; }

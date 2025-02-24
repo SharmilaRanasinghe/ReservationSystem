@@ -21,5 +21,4 @@ public class Route {
     public String getOrigin() { return origin; }
     public String getDestination() { return destination; }
     public boolean isReturnRoute() { return isReturnRoute; }
-   // public List<String> getIntermediateStops() { return new ArrayList<>(intermediateStops); }
 }

@@ -53,8 +53,8 @@ class BusReservationServiceTest {
 
         AvailabilityResponse response = busReservationService.checkAvailability(request);
 
-        assertTrue(response.isAvailable());
-        assertEquals(new BigDecimal("100"), response.getTotalPrice());
+        assertTrue(response.isSeatAvailability());
+        assertEquals(new BigDecimal("100"), response.getPricingInfo().totalPrice());
     }
 
     @Test
@@ -72,7 +72,7 @@ class BusReservationServiceTest {
 
         AvailabilityResponse response = busReservationService.checkAvailability(request);
 
-        assertFalse(response.isAvailable());
+        assertFalse(response.isSeatAvailability());
     }
 
     @Test
@@ -130,7 +130,7 @@ class BusReservationServiceTest {
             busReservationService.reserveTicket(request);
         });
 
-        assertEquals("Incorrect origin or destination", thrown.getMessage());
+        assertEquals("Invalid origin or destination", thrown.getMessage());
     }
 
     @Test

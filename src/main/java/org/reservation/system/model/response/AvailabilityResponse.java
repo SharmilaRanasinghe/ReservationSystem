@@ -3,39 +3,38 @@ package org.reservation.system.model.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-import java.math.BigDecimal;
+import org.reservation.system.model.PricingInfo;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonDeserialize(builder = AvailabilityResponse.Builder.class)
 public class AvailabilityResponse {
-    private final boolean isAvailable;
-    private final BigDecimal totalPrice;
+    private final boolean seatAvailability;
+    private final PricingInfo pricingInfo;
 
     private AvailabilityResponse(Builder builder) {
-        this.isAvailable = builder.isAvailable;
-        this.totalPrice = builder.basePrice;
+        this.seatAvailability = builder.seatAvailability;
+        this.pricingInfo = builder.pricingInfo;
     }
 
     // Getters
-    public boolean isAvailable() { return isAvailable; }
+    public boolean isSeatAvailability() { return seatAvailability; }
 
-    public BigDecimal getTotalPrice() { return totalPrice; }
+    public PricingInfo getPricingInfo() { return pricingInfo; }
 
     public static class Builder {
-        private boolean isAvailable;
+        private boolean seatAvailability;
 
-        private BigDecimal basePrice;
+        private PricingInfo pricingInfo;
 
-        @JsonProperty("isAvailable")
-        public Builder isAvailable(boolean isAvailable) {
-            this.isAvailable = isAvailable;
+        @JsonProperty("seatAvailability")
+        public Builder seatAvailability(boolean seatAvailability) {
+            this.seatAvailability = seatAvailability;
             return this;
         }
 
-        @JsonProperty("totalPrice")
-        public Builder totalPrice(BigDecimal basePrice) {
-            this.basePrice = basePrice;
+        @JsonProperty("PricingInfo")
+        public Builder pricingInfo(PricingInfo pricingInfo) {
+            this.pricingInfo = pricingInfo;
             return this;
         }
 
