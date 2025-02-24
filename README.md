@@ -48,7 +48,7 @@ This will compile the code and package it into a .war file.
 ### 3. Deploy the Application
 Copy the generated .war file from the target directory to the webapps directory of your Tomcat server.
 ```bash
-cp target/bus-reservation-system.war /path/to/tomcat/webapps/
+cp target/reservation-system.war /path/to/tomcat/webapps/
 ```
 Start the Tomcat server:
 ```bash
@@ -58,7 +58,7 @@ Start the Tomcat server:
 ### 4.Access the Application
 Once the server is running, you can access the application at:
 ```bash
-http://localhost:8080/bus-reservation-system
+http://localhost:8080/reservation-system
 ```
 This will compile the code and package it into a .war file.
 
